@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\AppUserDtos\" />
-    <Folder Include="Dtos\AppRoleDtos\" />
+    <ProjectReference Include="..\Hff.JwtBackend.Business\Hff.JwtBackend.Business.csproj" />
   </ItemGroup>
+
 
 </Project>

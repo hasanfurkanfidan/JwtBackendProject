@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Hff.JwtBackend.Business.Concrete
 {
-    public class EfGenericManager<TEntity> : IGenericService<TEntity> where TEntity : class, ITable, new()
+    public class GenericManager<TEntity> : IGenericService<TEntity> where TEntity : class, ITable, new()
     {
         private readonly IGenericRepository<TEntity> _genericRepository;
-        public EfGenericManager(IGenericRepository<TEntity> genericRepository)
+        public GenericManager(IGenericRepository<TEntity> genericRepository)
         {
             _genericRepository = genericRepository;
         }
