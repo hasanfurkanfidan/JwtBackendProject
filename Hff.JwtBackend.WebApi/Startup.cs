@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using Hff.JwtBackend.Business.IOC;
+using Hff.JwtBackend.WebApi.CustomFilters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,7 @@ namespace Hff.JwtBackend.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDependencies();
+            services.AddScoped(typeof(ValidId<>));
             services.AddControllers().AddFluentValidation();
         }
 

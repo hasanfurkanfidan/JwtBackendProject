@@ -31,6 +31,8 @@ namespace Hff.JwtBackend.Business.IOC
 
 
             services.AddTransient<IValidator<ProductAddDto>, ProductAddDtoValidator>();
+            services.AddTransient<IValidator<ProductUpdateDto>, ProductUpdateDtoValidator>();
+
         }
     }
 }
