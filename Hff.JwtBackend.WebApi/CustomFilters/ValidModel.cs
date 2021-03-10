@@ -11,15 +11,11 @@ namespace Hff.JwtBackend.WebApi.CustomFilters
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var errors = context.ModelState.Values.Select(p => p.Errors.Select(i=>i.ErrorMessage)).FirstOrDefault();
-            var errorString = "";
-            foreach (var error in errors)
-            {
-                errorString = error + ",";
-            }
+            var errors = context.ModelState.Values.Select(p => p.Errors.Select(i => i.ErrorMessage));
+ 
             if (!context.ModelState.IsValid)
             {
-                context.Result = new BadRequestObjectResult(errorString);
+                context.Result = new BadRequestObjectResult(errors);
             }
            
         }

@@ -4,6 +4,7 @@ using Hff.JwtBackend.Business.Concrete;
 using Hff.JwtBackend.Business.ValidationRules;
 using Hff.JwtBackend.DataAccess.Abstract;
 using Hff.JwtBackend.DataAccess.Concrete.EntityFrameworkCore;
+using Hff.JwtBackend.Entities.Dtos.AppUserDtos;
 using Hff.JwtBackend.Entities.Dtos.ProductDtos;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -31,7 +32,7 @@ namespace Hff.JwtBackend.Business.IOC
 
 
             services.AddTransient<IValidator<ProductAddDto>, ProductAddDtoValidator>();
-            services.AddTransient<IValidator<ProductUpdateDto>, ProductUpdateDtoValidator>();
+            services.AddTransient<IValidator<AppUserLoginDto>, AppUserLoginDtoValidator>();
 
         }
     }

@@ -2,6 +2,7 @@
 using Hff.JwtBackend.Entities.Concrete;
 using Hff.JwtBackend.Entities.Dtos.ProductDtos;
 using Hff.JwtBackend.WebApi.CustomFilters;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -57,6 +58,12 @@ namespace Hff.JwtBackend.WebApi.Controllers
             await _productService.UpdateAsync(product);
             return NoContent();
         }
-
+        [Route("/error")]
+        public IActionResult Error()
+        {
+            var errorInfo = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            //Loglama
+            return Problem(detail:"Sunucuda hata oluştu en kısa zamanda düzeltilecek.");
+        }
     }
 }
