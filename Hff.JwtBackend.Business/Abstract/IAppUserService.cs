@@ -9,7 +9,7 @@ namespace Hff.JwtBackend.Business.Abstract
     public interface IAppUserService:IGenericService<AppUser>
     {
         Task<AppUser> GetUserWithUserName(string userName);
-        Task<bool> CheckUserWithUserNameAndPasswod(string username, string password);
+        Task<bool> CheckUserWithUserNameAndPassword(string username, string password);
         Task<List<AppRole>> GetUserRolesWithUserName(string userName);
     }
 }

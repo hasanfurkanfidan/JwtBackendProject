@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using Business.Jwt.Abstract;
+using Business.Jwt.Concrete;
+using FluentValidation;
 using Hff.JwtBackend.Business.Abstract;
 using Hff.JwtBackend.Business.Concrete;
 using Hff.JwtBackend.Business.ValidationRules;
@@ -30,6 +32,7 @@ namespace Hff.JwtBackend.Business.IOC
             services.AddScoped<IAppUserRoleRepository, EfAppUserRoleRepository>();
             services.AddScoped<IAppRoleRepository, EfAppRoleRepository>();
 
+            services.AddScoped<ITokenHelper, JwtHelper>();
 
             services.AddTransient<IValidator<ProductAddDto>, ProductAddDtoValidator>();
             services.AddTransient<IValidator<AppUserLoginDto>, AppUserLoginDtoValidator>();

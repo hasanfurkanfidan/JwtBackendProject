@@ -23,7 +23,7 @@ namespace Business.Jwt.Concrete
         public JwtHelper(IConfiguration configuration)
         {
             Configuration = configuration;
-            var tokenOptions = Configuration.GetSection("TokenOptions").Get<Utilities.TokenOptions>();
+            _tokenOptions = Configuration.GetSection("TokenOptions").Get<Utilities.TokenOptions>();
         }
         public AccessToken CreateToken(AppUser user, List<AppRole> operationClaims)
         {

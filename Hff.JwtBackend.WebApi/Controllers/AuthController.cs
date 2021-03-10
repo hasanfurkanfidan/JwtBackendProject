@@ -19,9 +19,10 @@ namespace Hff.JwtBackend.WebApi.Controllers
     {
         private readonly IAppUserService _appUserService;
         private readonly ITokenHelper _tokenHelper; 
-        public AuthController(IAppUserService appUserService)
+        public AuthController(IAppUserService appUserService,ITokenHelper tokenHelper)
         {
             _appUserService = appUserService;
+            _tokenHelper = tokenHelper;
         }
         [HttpGet("[action]")]
         [ValidModel]
@@ -34,7 +35,7 @@ namespace Hff.JwtBackend.WebApi.Controllers
             }
             else
             {
-                if (await _appUserService.CheckUserWithUserNameAndPasswod(appUserLoginDto.UserName,appUserLoginDto.Password))
+                if (await _appUserService.CheckUserWithUserNameAndPassword(appUserLoginDto.UserName,appUserLoginDto.Password))
                 {
                     var roles = await _appUserService.GetUserRolesWithUserName(user.Username);
                     var token =  _tokenHelper.CreateToken(user, roles);

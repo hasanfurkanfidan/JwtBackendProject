@@ -20,15 +20,12 @@ namespace Hff.JwtBackend.Business.Concrete
             _appRoleRepository = appRoleRepository;
         }
 
-        public Task<bool> CheckUserWithUserNameAndPasswod(string username, string password)
-        {
-            throw new NotImplementedException();
-        }
+     
 
         public async Task<bool> CheckUserWithUserNameAndPassword(string username, string password)
         {
             var user = await _appUserRepository.GetAsync(p => p.Username == username && p.Password == password);
-            if (user != null)
+            if (user == null)
             {
                 return false;
             }
