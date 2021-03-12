@@ -6,6 +6,7 @@ using Hff.JwtBackend.Business.StringInfos;
 using Hff.JwtBackend.Entities.Concrete;
 using Hff.JwtBackend.Entities.Dtos.AppUserDtos;
 using Hff.JwtBackend.WebApi.CustomFilters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -30,7 +31,7 @@ namespace Hff.JwtBackend.WebApi.Controllers
             _appUserRoleService = appUserRoleService;
             _tokenHelper = tokenHelper;
         }
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         [ValidModel]
         public async Task<IActionResult> SignIn(AppUserLoginDto appUserLoginDto)
         {
@@ -74,6 +75,24 @@ namespace Hff.JwtBackend.WebApi.Controllers
                 return Created("", Messages.SignUpSuccessful);
             }
             return BadRequest(Messages.UserAlreadyExist);
+        }
+        [Authorize]
+        [HttpGet("[action]")]
+        public async Task<IActionResult> ActiveUser()
+        {
+            var userName = User.Identity.Name;
+            var user = await _appUserService.GetUserWithUserName(userName);
+            var roles = await _appUserService.GetUserRolesWithUserName(userName);
+            var rolesString = new List<string>();
+            foreach (var role in roles)
+            {
+                rolesString.Add(role.Name);
+            }
+            var activeUserDto = new ActiveUserDto();
+            activeUserDto.Roles = rolesString;
+            activeUserDto.UserName = userName;
+            activeUserDto.Fullname = user.Fullname;
+            return Ok(activeUserDto);
         }
     }
 }

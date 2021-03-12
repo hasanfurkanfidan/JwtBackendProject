@@ -6,6 +6,7 @@ namespace Hff.JwtBackend.Business.StringInfos
 {
     public class RoleInfos
     {
-        public static string Member = "Member";
+        public const string Member = "Member";
+        public const string Admin = "Admin";
     }
 }
