@@ -4,14 +4,22 @@ using Hff.JwtBackend.Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Hff.JwtBackend.Business.Concrete
 {
    public class AppRoleManager:GenericManager<AppRole>,IAppRoleService
     {
-        public AppRoleManager(IGenericRepository<AppRole>genericRepository):base(genericRepository)
+        private readonly IAppRoleRepository _appRoleRepository;
+        public AppRoleManager(IGenericRepository<AppRole>genericRepository,
+            IAppRoleRepository appRoleRepository):base(genericRepository)
         {
+            _appRoleRepository = appRoleRepository;
+        }
 
+        public async Task<AppRole> GetAppRoleWithNameAsync(string name)
+        {
+           return await _appRoleRepository.GetAsync(p => p.Name == name);
         }
     }
 }

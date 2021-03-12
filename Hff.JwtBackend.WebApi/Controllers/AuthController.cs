@@ -2,6 +2,7 @@
 using Business.Jwt.Concrete;
 using Business.Jwt.Utilities;
 using Hff.JwtBackend.Business.Abstract;
+using Hff.JwtBackend.Business.StringInfos;
 using Hff.JwtBackend.Entities.Concrete;
 using Hff.JwtBackend.Entities.Dtos.AppUserDtos;
 using Hff.JwtBackend.WebApi.CustomFilters;
@@ -20,9 +21,13 @@ namespace Hff.JwtBackend.WebApi.Controllers
     {
         private readonly IAppUserService _appUserService;
         private readonly ITokenHelper _tokenHelper;
-        public AuthController(IAppUserService appUserService, ITokenHelper tokenHelper)
+        private readonly IAppRoleService _appRoleService;
+        private readonly IAppUserRoleService _appUserRoleService;
+        public AuthController(IAppUserService appUserService,IAppUserRoleService appUserRoleService, ITokenHelper tokenHelper,IAppRoleService appRoleService)
         {
             _appUserService = appUserService;
+            _appRoleService = appRoleService;
+            _appUserRoleService = appUserRoleService;
             _tokenHelper = tokenHelper;
         }
         [HttpGet("[action]")]
@@ -32,7 +37,7 @@ namespace Hff.JwtBackend.WebApi.Controllers
             var user = await _appUserService.GetUserWithUserName(appUserLoginDto.UserName);
             if (user == null)
             {
-                return BadRequest("Kullanıcı adı veya şifre hatalı");
+                return BadRequest(Messages.FalseUserNameOrPassword);
             }
             else
             {
@@ -42,7 +47,7 @@ namespace Hff.JwtBackend.WebApi.Controllers
                     var token = _tokenHelper.CreateToken(user, roles);
                     return Created("", token);
                 }
-                return BadRequest("Kullanıcı adı veya şifre hatalı");
+                return BadRequest(Messages.FalseUserNameOrPassword);
             }
         }
         [HttpPost("[action]")]
@@ -52,13 +57,23 @@ namespace Hff.JwtBackend.WebApi.Controllers
             var user = await _appUserService.GetUserWithUserName(appUserRegisterDto.UserName);
             if (user == null)
             {
-                await _appUserService.AddAsync(new AppUser { Fullname = appUserRegisterDto.Fullname,
-                    Password = appUserRegisterDto.Password, Username = appUserRegisterDto.UserName });
-
-
-                return Created("", "Kayıt başarı ile eklendi");
+                var newUser = new AppUser
+                {
+                    Fullname = appUserRegisterDto.Fullname,
+                    Password = appUserRegisterDto.Password,
+                    Username = appUserRegisterDto.UserName
+                };
+                await _appUserService.AddAsync(newUser);
+                var ourUser = await _appUserService.GetUserWithUserName(appUserRegisterDto.UserName);
+                var role = await _appRoleService.GetAppRoleWithNameAsync(RoleInfos.Member);
+                await _appUserRoleService.AddAsync(new AppUserRole
+                {
+                    AppRoleId = role.Id,
+                    AppUserId = ourUser.Id
+                });
+                return Created("", Messages.SignUpSuccessful);
             }
-            return BadRequest("Kullanıcı adı alınmış");
+            return BadRequest(Messages.UserAlreadyExist);
         }
     }
 }
